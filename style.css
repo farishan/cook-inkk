@@ -1,0 +1,236 @@
+*{
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	outline-color: grey;
+	user-select: none;
+}
+button, select{
+	cursor: pointer;
+	min-width: 50px;
+	padding: 5px 10px;
+	font-size: 0.75em;
+	letter-spacing: 1px;
+}
+input {
+	padding: 5px 10px;
+}
+blockquote {
+	background-color: #eee;
+	padding: 1rem;
+	border-left: 2px solid #aaa;
+}
+section{
+	padding: 15px 0;
+}
+thead td{
+	background-color: #ccc;
+	border: 1px dashed darkgrey;
+}
+td{
+	border: 1px dashed lightgrey;
+	padding: 5px;
+	background-color: #fff;
+}
+#alert{
+	display: none;
+	position: absolute;
+	left: 50%;
+	top: 0;
+	z-index: 99;
+	transform: translateX(-50%);
+	width: 100%;
+	padding: 15px;
+	font-family: sans-serif;
+	letter-spacing: 1px;
+	font-size: 0.8em;
+}
+.money{
+	position: absolute;
+	top: -16px;
+	right: 0px;
+	z-index: 98;
+	background:linear-gradient(30deg, #232526, #414345);
+	color: gold;
+	padding: 5px;
+}
+.money span{
+	font-weight: 900;
+	transition: all 0.1s ease-out;
+}
+.container{
+	width: 800px;
+	height: 600px;
+	background:linear-gradient(30deg, #D1913C, #FFD194);
+	border:1px solid black;
+	padding:15px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+.page{
+	display: none;
+	background-color: #fff;
+	width: 100%;
+	height: 75%;
+	padding: 15px;
+}
+.main-menu{
+	width: 100%;
+	background: none;
+	display: block;
+	border:1px solid #D1913C;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	height: auto;
+	text-align: center;
+	margin-bottom: 15px;
+	padding: 15px 0;
+}
+
+
+#cook_page{
+
+}
+#cook_page .select-wrapper{
+	padding: 15px 0;
+}
+#cook_page .select-wrapper h3{
+	margin-bottom: 0;
+}
+
+#cook_page .select-wrapper .btn-wrap{
+	/*text-align: right;*/
+	padding: 15px 0;
+}
+
+.hint{
+	font-size: 0.8em;
+	color:#232526;
+	transition: 1s ease;
+	margin-bottom: 1rem;
+}
+
+#random_ing{
+	background-color: #fff;
+	color: #aaa;
+}
+
+#mix_page_trigger{
+	width: 100px;
+	height: 50px;
+}
+
+#mix_page{
+
+}
+
+#mix_page .hint-container{
+	width: 600px;
+	padding: 15px;
+	height: 100px;
+	text-align: center;
+}
+
+#mix_page .hint-container .container{
+	padding:0 15px;
+	width: auto;
+	text-align: center;
+	margin: auto;
+	height: auto;
+	background-color: #ccc;
+	font-size: 1.5em;
+	font-weight: 900;
+	letter-spacing: 3px;
+	font-family: sans-serif;
+}
+
+#mix_container {
+	position: relative;
+}
+
+#shop_page{
+
+}
+#shop_page h2{
+	margin-bottom: 0;
+}
+
+#shop_page .buy{
+	border: 1px solid lightgrey;
+	width: 100%;
+	margin-top: 15px;
+	padding: 15px;
+	background-color: #eaeaea;
+}
+
+#shop_page .buy table{
+	width: 49.71%;
+	display: inline-block;
+	vertical-align: top;
+	font-size: 0.8em;
+}
+
+#shop_page .buy table input{
+	max-width: 150px;
+}
+
+#shop_page .sell .hint-container{
+	margin-bottom: 3px;
+}
+
+#recipe_page{
+	background: none;
+	padding:0;
+}
+
+#recipe_page .wrapper{
+
+}
+
+#recipe_page .wrapper .recipe{
+	padding: 15px;
+	border: 10px solid #eee;
+	background-color: #fff;
+	margin-top: 15px;
+	width: 20%;
+	height: 240px;
+	float: left;
+	position: relative;
+}
+
+#recipe_page .wrapper .recipe ul{
+	padding-left: 10px;
+	margin: 5px;
+	font-size: 0.9em;
+}
+
+#recipe_page .wrapper .recipe h4{
+	text-transform: uppercase;
+	font-size: 0.9em;
+}
+
+#recipe_page .wrapper .recipe i{
+	font-size: 0.8em;
+}
+
+#recipe_page .wrapper .recipe .price{
+	position: absolute;
+	right: 0;
+	top: 0;
+	margin:5px;
+	color: goldenrod;
+}
+
+#credits{
+	display: none;
+	width: 100%;
+	height: 100%;
+	background-color: #fff;
+	z-index: 999;
+	letter-spacing: 3px;
+	text-align: center;
+	padding-top: 200px;
+}

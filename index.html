@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>cookINKK</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="container">
+
+	<!-------------
+		GLOBAL UI
+	-------------->
+	<span id="alert"></span>
+	<p class="money"><span id="money"></span> gold</p>
+
+	<!-------------
+		MAIN MENU
+	-------------->
+	<div class="main-menu" id="main_menu">
+		<button id="cook_page_trigger" data-target="cook">cook!</button>
+		<button id="shop_page_trigger" data-target="shop">shop</button>
+		<button id="inv_page_trigger" data-target="inv">inkkventory</button>
+		<button id="magz_page_trigger" data-target="magz">magazine</button>
+		<button id="recipe_page_trigger" data-target="recipe">recipes</button>
+		<br><br>
+		<i class="hint">collect <b>10 cookie recipes</b> to win this game. <br> more cookie recipes discovered, more happiness will come. <br> in cookies we trust! INKK! </i>
+	</div>
+
+	<!-------------
+		COOK PAGE
+	-------------->
+	<div class="page" id="cook_page">
+		<!-- <button class="back_to_main_menu">main menu</button> -->
+
+		<div class="select-wrapper">
+			<h3>select ingredients:</h3>
+			<i class="hint">please make sure you have enough ingredients. <br>
+				<!-- and don't put same ingredients. <br>  -->
+			when you clicked mix button, all inputed items will be used. be wise and be careful :)</i>
+
+			<br><br>
+
+			<!-- <button id="random_ing">random</button> -->
+			<select name="ing1" id="ing1">
+				<option value="">-</option>
+			</select>
+			<select name="ing2" id="ing2">
+				<option value="">-</option>
+			</select>
+			<select name="ing3" id="ing3">
+				<option value="">-</option>
+			</select>
+			<select name="ing4" id="ing4">
+				<option value="">-</option>
+			</select>
+			<br>
+			<div class="btn-wrap">
+				<button id="mix_page_trigger">mix</button>
+			</div>
+		</div>
+	</div>
+
+	<!-------------
+		MIX PAGE
+	-------------->
+	<div class="page" id="mix_page">
+		<!-- <button class="back_to_main_menu">main menu</button> -->
+		<div class="container hint-container">
+			<div>
+				<i class="hint">type the text below  from the leftmost to the right end, carefully. one mistake makes you pay one gold..</i>
+			</div>
+			<div class="container" id="mix_container"></div>
+		</div>
+	</div>
+
+	<!-------------
+		SHOP PAGE
+	-------------->
+	<div class="page" id="shop_page">
+		<!-- <button class="back_to_main_menu">main menu</button> -->
+		<h2>welcome to Inkky Supply Co.</h2>
+		<i class="hint">what can we do for you?</i>
+
+		<section class="buy">
+			<table>
+				<thead>
+					<tr>
+						<td>item</td>
+						<td>price</td>
+						<td>quantity</td>
+						<td></td>
+					</tr>
+				</thead>
+				<tbody id="shop_inventory">
+					<!-- <tr>
+						<td>flour</td>
+						<td>10</td>
+						<td><input type="number"></td>
+						<td><button>buy</button></td>
+					</tr> -->
+				</tbody>
+			</table>
+			<table>
+				<thead>
+					<tr>
+						<td>item</td>
+						<td>price</td>
+						<td>quantity</td>
+						<td></td>
+					</tr>
+				</thead>
+				<tbody id="shop_inventory2">
+					<!-- <tr>
+						<td>flour</td>
+						<td>10</td>
+						<td><input type="number"></td>
+						<td><button>buy</button></td>
+					</tr> -->
+				</tbody>
+			</table>
+			<!-- <button>buy all</button> -->
+		</section>
+
+		<section class="sell">
+			<p class="hint-container"><i class="hint">need some money?</i></p>
+			<div id="sell_price"></div>
+			<select name="sellthis" id="sellthis">
+				<option value="">-</option>
+			</select>
+			<input type="number" value="" id="sell_qty">
+			<button id="sell">sell</button>
+		</section>
+	</div>
+
+	<!-------------
+		INVENTORY PAGE
+	-------------->
+	<div class="page" id="inv_page">
+		<!-- <button class="back_to_main_menu">main menu</button> -->
+		<h2>Inkkventory</h2>
+		<ul id="inventory">
+
+		</ul>
+	</div>
+
+	<!-------------
+		MAGAZINE PAGE
+	-------------->
+	<div class="page" id="magz_page">
+		<h2>Inkky Magz</h2>
+		<p>today's tips & tricks:</p>
+		<blockquote>
+			"<i id="tips"></i>" <small>- Chef Kukki</small>
+		</blockquote>
+	</div>
+
+	<!-------------
+		RECIPE PAGE
+	-------------->
+	<div class="page" id="recipe_page">
+		<!-- <button class="back_to_main_menu">main menu</button> -->
+		<div class="wrapper" id="recipes">
+			<!-- <div class="recipe">
+				<h4 id="recipe_name">just cookie</h4>
+				<i id="recipe_ing1">ing1</i>
+				<i id="recipe_ing2">ing2</i>
+				<i id="recipe_ing3">ing3</i>
+				<i id="recipe_ing4">ing4</i>
+			</div> -->
+		</div>
+	</div>
+
+	<!-------------
+		COOK PAGE
+	-------------->
+	<div class="page" id="credits">
+		<h1>10 recipes collected. <br> You win!</h1>
+	</div>
+</main>
+
+<script src="jquery.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

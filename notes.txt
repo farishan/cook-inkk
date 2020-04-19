@@ -1,0 +1,11 @@
+todos:
+- search UI references
+- audio engine
+- engine logger
+- versioning
+
+ideas:
+[cook] cooking template
+[shop] cart system
+[shop] buy all button
+[shop] sell all button
