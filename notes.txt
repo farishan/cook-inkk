@@ -1,8 +1,13 @@
+cookINKK - Faris Han - since ‎27 ‎July ‎2019, ‏‎17:30:46
+
 todos:
 - search UI references
 - audio engine
 - engine logger
 - versioning
+
+bugs:
+- last key when cooking always right
 
 ideas:
 [cook] cooking template

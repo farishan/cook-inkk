@@ -215,6 +215,10 @@ Player.prototype.renderMoney = function(){
     if(document.getElementById("money")){
         document.getElementById("money").innerHTML = this.money;
     }
+
+    if(document.getElementById("moneyOnMix")){
+      document.getElementById("moneyOnMix").innerHTML = this.money;
+  }
 };
 
 Player.prototype.addMoney = function(amount){
@@ -356,6 +360,9 @@ function Navigator(){
                     console.log("ready again");
                 }, 500);
             }
+
+            /* Check if player is already lose when switching page */
+            isLose()
         }
     };
 
@@ -578,51 +585,58 @@ function startMixing(text_arr, val_arr){
         if(text_arr.length==0 || start_mix==false){
             console.log("bukan area mixing");
         }else{
-            if (text_arr.length==1 && start_mix==true) {
-                //DONE
-                text_arr = [];
-                $("#mix_container").html("");
+          // console.log("yang harus dipencet: "+text_arr[0]);
+          // console.log("yang kamu pencet: "+e.keyCode);
+          // console.log("mulai loop");
+          if(start_mix==true){
+            if(e.key!=text_arr[0]){
+              player.addMoney(-1);
 
-                getCookie(val_arr);
+              /* Change money style */
+              $("#moneyOnMix").attr(
+                "style",
+                "color:red; font-weight:700"
+              );
+              $(".hint").attr(
+                  "style",
+                  "color:red; font-weight:700"
+              );
+
+              /* Reset money style */
+              setTimeout(function(){
+                  $(".hint").attr(
+                      "style",
+                      "color:#232526; font-weight:400"
+                  );
+                  $("#moneyOnMix").attr(
+                    "style",
+                    "color:#222; font-weight:400"
+                  );
+              }, 500);
             }else{
-                // console.log("yang harus dipencet: "+text_arr[0]);
-                // console.log("yang kamu pencet: "+e.keyCode);
-                // console.log("mulai loop");
-                if(e.key!=text_arr[0]){
-                    player.addMoney(-1);
-                    $("#money").attr(
-                        "style",
-                        "color:red; font-weight:900"
-                    );
-                    $(".hint").attr(
-                        "style",
-                        "color:red; font-weight:900"
-                    );
-                    setTimeout(function(){
-                        $(".hint").attr(
-                            "style",
-                            "color:#232526; font-weight:400"
-                        );
-                        $("#money").attr(
-                            "style",
-                            "color:gold; font-weight:400"
-                        );
-                    }, 500);
-                }else{
-                    //delete soalnya satu satu
-                    var i;
-                    for (i = config.arrows.length - 1; i >= 0; i--) {
-                        if(e.keyCode == config.arrows[i].keyCode){
-                            if(e.key == text_arr[0]){
-                                text_arr.splice(0,1);
-                            }
-                            break;
+                //delete soalnya satu satu
+                var i;
+                for (i = config.arrows.length - 1; i >= 0; i--) {
+                    if(e.keyCode == config.arrows[i].keyCode){
+                        if(e.key == text_arr[0]){
+                            text_arr.splice(0,1);
                         }
+                        break;
                     }
                 }
-                $("#mix_container").html("");
-                $("#mix_container").append(text_arr);
+
+                if (text_arr.length==0) {
+                  //DONE
+                  text_arr = [];
+                  $("#mix_container").html("");
+
+                  getCookie(val_arr);
+              }
             }
+
+            $("#mix_container").html("");
+            $("#mix_container").append(text_arr);
+          }
         }
     });
 }
@@ -694,6 +708,12 @@ function getCookie(val_arr){
         }else{
             alertCustom("red", "you got ...<b>nothing</b>.", 3000);
         }
+
+        /* Reset money style */
+        $("#moneyOnMix").attr(
+          "style",
+          "color:#222; font-weight:400"
+        );
     }, 100);
 }
 
@@ -770,7 +790,7 @@ function initializeShop(){
     for (i = 0; i <= database.items.length - 1; i += 1) {
         item = "<tr class='shop-item'>"+
         "<td>"+database.items[i].name+"</td>"+
-        "<td>"+database.items[i].price+"</td>"+
+        "<td data-price='"+database.items[i].price+"'><span>"+database.items[i].price+" g</span></td>"+
         "<td><input type='number'></td><td><button " + b +
         ">buy</button></td></tr>";
 
@@ -799,7 +819,7 @@ function shopUpdate(){
 
 function buyThis(item){
     var item_name = item.firstChild.innerText;
-    var item_price = item.getElementsByTagName("td")[1].innerText;
+    var item_price = item.getElementsByTagName("td")[1].dataset.price;
     var item_qty = item.getElementsByTagName("td")[2].firstChild.value;
 
     var firstnum = item_qty.substring(0,1);
@@ -817,7 +837,7 @@ function buyThis(item){
     // alertCustom("red", "please, do not start with 0.", 3000);
     // }
     else{
-
+      console.log(item_qty, item_price)
         //success buy
         var msg = "You bought: "+item_qty+" "
         +item_name+"(s). Total price: "+item_qty*item_price;
@@ -958,8 +978,8 @@ function generateRecipes(){
     var list;
     for (i = 0; i <= database.recipes.length - 1; i += 1) {
         item = database.recipes[i];
-        list = "<div class='recipe'><i class='price'> sell price: <b>"
-        +item.price+"</b>g</i><h4>"+item.name+"</h4>"
+        list = "<div class='recipe'><span class='price'> sell price: <b>"
+        +item.price+"</b> g</span><h4>"+item.name+"</h4>"
         +"<ul><li>"+item.ing_1+"</li>"
         +"<li>"+item.ing_2+"</li>"
         +"<li>"+item.ing_3+"</li>"
@@ -1007,6 +1027,15 @@ function isWin(){
     }
 }
 
+function isLose(){
+  if(player.money <= 0){
+      setTimeout(function(){
+          $('#credits').html('you lose. run out of money.')
+          $("#credits").show("slow");
+      }, 1000);
+  }
+}
+
 // CKNKK14. Functions
 /*=== FIXED FUNCTIONS ===*/
 function alertCustom(color, msg, timeout){
@@ -1041,7 +1070,7 @@ function alertCustom(color, msg, timeout){
         document.getElementById("alert")
         .setAttribute(
             "style",
-            "background-color:rgba(0,0,0,0); color:#232526; display:block;"
+            "background-color:rgba(0,0,0,0); color:#fff; display:block;"
         );
     }
     else{
