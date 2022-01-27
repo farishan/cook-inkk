@@ -41,6 +41,10 @@ button:active {
   border: 1px solid #fff;
 }
 
+button:disabled {
+  opacity: 0.5;
+}
+
 input,
 select {
   border: 1px solid #f7b733;
@@ -87,6 +91,9 @@ td {
   padding: 5px;
   background-color: #fff;
 }
+td b {
+  font-weight: bold;
+}
 ul li {
   list-style-type: disc;
 }
@@ -123,6 +130,7 @@ i {
   background: #f7b733;
   border-left: 2px dashed #222;
   border-bottom: 2px dashed #222;
+  font-size: 1.25rem;
 }
 .money span {
   font-weight: 900;
@@ -328,13 +336,13 @@ i {
   border-left: 2px dashed #fff;
   border-top: 2px dashed #fff;
   background: #f7b733;
-  /* color: #f7b733; */
   font-weight: 300;
   font-size: 0.825rem;
 }
 
 #recipe_page .wrapper .recipe .price b {
   font-weight: bold;
+  font-size: 1rem;
 }
 
 #credits {

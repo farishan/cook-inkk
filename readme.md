@@ -16,6 +16,8 @@ Started on ‎27 ‎July ‎2019 ‏‎17:30:46.
 - [ ] versioning
 - [ ] basic security
 - [ ] more ways to get hints
+- [ ] tutorial
+- [ ] story line
 
 ### Ideas
 - [ cook ] cooking template

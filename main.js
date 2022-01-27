@@ -163,7 +163,7 @@ var database = {
         "let's try to adding salt to this.."
         +" and this.. and more salt with this.",
         "2 same ingredients will fail. unique item is the key.",
-        "not enough money, eh? try to sell more discovered cookies."
+        "not enough ¤, eh? try to sell more discovered cookies."
     ]
 };
 
@@ -226,6 +226,26 @@ Player.prototype.addMoney = function(amount){
     this.renderMoney();
 };
 
+Player.prototype.addStarterItems = function (starterItems, databaseItems){
+  // Loop through starter items on config
+  starterItems.forEach(function(item) {
+      var key = item[0]
+      var qty = item[1]
+
+      if(databaseItems[key] && databaseItems[key].name){
+        // Add item to player's inventory
+        addItem({
+            "name": databaseItems[key].name,
+            "qty": qty
+        });
+      } else {
+        console.error('something wrong with addStarterItems function')
+      }
+  });
+}
+
+
+
 // CKNKK4. Global Variables
 var player = new Player();
 var collected_recipes = 1;
@@ -234,7 +254,7 @@ var gameNavigator = new Navigator();
 // CKNKK5. Init
 $(document).ready(function(){
     // Player
-    addStarterItems();
+    player.addStarterItems(config.starterItems, database.items);
 
     // Shop
     initializeShop();
@@ -246,7 +266,6 @@ $(document).ready(function(){
 
     // User Interfaces
     player.renderMoney();
-    console.log(gameNavigator);
     gameNavigator.activate();
     activateInputReseter();
     activateInputListener();
@@ -338,7 +357,7 @@ function Navigator(){
                 }
 
                 else{
-                    console.log("no target");
+                    console.info("no target");
                 }
 
                 if(target){
@@ -350,14 +369,12 @@ function Navigator(){
         var pageReady = true;
 
         function switchPage(page){
-            console.log("switch page,", pageReady);
             if(pageReady){
                 pageReady = false;
                 $(".page").hide("fast");
                 $(page).toggle("fast");
                 setTimeout(function(){
                     pageReady = true;
-                    console.log("ready again");
                 }, 500);
             }
 
@@ -367,23 +384,6 @@ function Navigator(){
     };
 
     return this;
-}
-
-// Add player starter items
-function addStarterItems(){
-
-    // change variable name if you confused
-    var si = config.starterItems;
-    var di = database.items;
-
-    // Loop through starter items on config
-    si.forEach(function(item, idx) {
-        // Add item to player's inventory
-        addItem({
-            "name": di[item[0]].name,
-            "qty": item[1]
-        });
-    });
 }
 
 // CKNKK7. Cooking
@@ -424,7 +424,6 @@ $("#random_ing").click(function(){
     var inventory = player.inventory;
     var random = Math.floor(Math.random()*(inventory.length));
 
-    console.log(inventory);
     if(inventory.length!=0){
         for(i = 0; i < 4; i += 1){
 
@@ -475,24 +474,18 @@ $("#mix_page_trigger").click(function(){
                 inputed = val_arr[j];
 
                 // Inputed item is on inventory. Nice!
-                if(inputed==item.name){
-                    console.log(inputed+" ada " + item.qty);
+                if(inputed == item.name){
                     if(item.qty>0){
-                        console.log(inputed+" kita kurangin 1");
-                        item.qty-=1;
-                        console.log("sekarang "+ item.name+" ada "+item.qty);
+                        item.qty -= 1;
                         start_mix = true;
                     }else{
-
                         // Fungsi di bawah ini akan dieksekusi jika:
                         // Kamu punya 1 item,
                         // tapi masukin ke inputnya 2. contoh:
                         // Ada 1 egg di invetory, tapi nginputnya gini:
                         // !EGG | !EGG | flour | butter
                         // nanti eggnya ilang.
-                        // *BUGS: coba beli 2 egg,
-                        // terus set inputnya: butter|egg|egg|egg;
-                        // *todoe: Enhance item input system.
+                        // @todo: Enhance item input system.
                         alertCustom(
                             "red",
                             "Whoops! you made a mistake when adding "
@@ -505,9 +498,6 @@ $("#mix_page_trigger").click(function(){
                         }
                         break;
                     }
-
-                }else{
-                    console.log(inputed+" bukan " + item.name);
                 }
             }
 
@@ -517,7 +507,7 @@ $("#mix_page_trigger").click(function(){
                         "green",
                         "It's okay.<br> Inkky Supply Co. "+
                         " bought your failed cookies"+
-                        " for 1 gold. :)",
+                        " for 1 ¤. :)",
                         5000
                     );
                     player.addMoney(1);
@@ -539,10 +529,7 @@ $("#mix_page_trigger").click(function(){
 
             ingReset();
             ingInit();
-        }else{
-            console.log("start mix false");
         }
-
     }else{
         alertCustom("red", "i think we missed something...", 3000);
     }
@@ -552,12 +539,10 @@ function mixingInit(val_arr){
     var random;
     for(i=0;i<5;i += 1){
         random = Math.floor(Math.random()*(3 + 1));
-        // console.log(random)
         $("#mix_container").append(config.arrows[random].htmlCode);
     }
     var container = $("#mix_container");
     var text = container[0].innerText;
-    // console.log("text: "+text)
 
     var text_arr = [];
 
@@ -565,11 +550,9 @@ function mixingInit(val_arr){
     var splitted;
     for (i = 0; i < text.length; i += 1) {
         splitted = text.substring(i,i+1);
-        // console.log(i, splitted)
         text_arr.push(splitted);
     }
 
-    // console.log(text_arr);
     $("#mix_container").html("");
     $("#mix_container").append(text_arr);
 
@@ -578,16 +561,9 @@ function mixingInit(val_arr){
 
 function startMixing(text_arr, val_arr){
     $(document).keypress(function(e){
-        // console.log("status: " + start_mix)
-        // console.log("pressed: " + e.keyCode)
-        // console.log("panjang soal: "+text_arr.length)
-
-        if(text_arr.length==0 || start_mix==false){
-            console.log("bukan area mixing");
+        if(text_arr.length == 0 || start_mix == false){
+            console.info("bukan area mixing");
         }else{
-          // console.log("yang harus dipencet: "+text_arr[0]);
-          // console.log("yang kamu pencet: "+e.keyCode);
-          // console.log("mulai loop");
           if(start_mix==true){
             if(e.key!=text_arr[0]){
               player.addMoney(-1);
@@ -597,14 +573,14 @@ function startMixing(text_arr, val_arr){
                 "style",
                 "color:red; font-weight:700"
               );
-              $(".hint").attr(
+              $("#mix_page .hint").attr(
                   "style",
                   "color:red; font-weight:700"
               );
 
               /* Reset money style */
               setTimeout(function(){
-                  $(".hint").attr(
+                  $("#mix_page .hint").attr(
                       "style",
                       "color:#232526; font-weight:400"
                   );
@@ -643,8 +619,6 @@ function startMixing(text_arr, val_arr){
 
 function getCookie(val_arr){
     var cookie;
-    console.clear();
-    console.log("bahan-bahanmu: "+val_arr);
 
     var i;
     var a;
@@ -662,7 +636,6 @@ function getCookie(val_arr){
             cookie = database.recipes[i].name;
             break;
         }
-        console.log("the loop is stopped an you got nothing");
     }
 
     start_mix = false;
@@ -722,37 +695,27 @@ function getCookie(val_arr){
 /*   INVENTORY  */
 /*==============*/
 function addItem(item){
-    // console.clear();
-    if(player.inventory.length==0){
-        console.log("add item: "+item.name);
+    var inventoryIsEmpty = player.inventory.length == 0
+
+    if(inventoryIsEmpty){
         player.inventory.push(item);
-        inventoryUpdate();
     }else{
-        // console.warn("mulai sorting yang ada ditas");
-        var i;
-        var found = false;
-        for (i = player.inventory.length - 1; i >= 0; i--) {
-            // console.log("sortingan ke: "+i)
-            if(item.name==player.inventory[i].name){
-                console.log("edit item: "+item.name+" qty");
-                found = player.inventory[i];
-            }else if(i==0 && item.name!=player.inventory[i].name){
-                console.log("push new item:" + item.name);
-            }else{
-                console.log("yang dibeli:"+item.name,
-                "yang kena sorting:"+ player.inventory[i].name);
-                // console.log("lanjut sorting")
+        var targetItem = false;
+
+        for (var i = player.inventory.length - 1; i >= 0; i--) {
+            if(item.name == player.inventory[i].name){
+                targetItem = player.inventory[i];
             }
         }
 
-        if(found){
-            found.qty+=item.qty;
-            inventoryUpdate();
+        if(targetItem){
+            targetItem.qty += item.qty;
         }else{
             player.inventory.push(item);
-            inventoryUpdate();
         }
     }
+
+    inventoryUpdate();
 }
 
 function inventoryUpdate(){
@@ -761,22 +724,17 @@ function inventoryUpdate(){
     var empty = true;
 
     // reinit items to inv
-    var i;
-    var item;
-    for (i = player.inventory.length - 1; i >= 0; i--) {
-        item = player.inventory[i];
-        if(item.qty!=0){
+    for (var i = player.inventory.length - 1; i >= 0; i--) {
+        var item = player.inventory[i];
+        if(item.qty > 0){
             empty = false;
             $("#inventory").append("<li>"+item.qty+" "+item.name+"</li>");
         }
     }
 
-    if (empty) {
+    if (empty === true) {
         $("#inventory").append("<i>empty.</i>");
     }
-
-    console.log("inventory updated:");
-    console.log(player.inventory);
 }
 
 // CKNKK10. Shop
@@ -784,21 +742,68 @@ function inventoryUpdate(){
 /*     SHOP     */
 /*==============*/
 function initializeShop(){
-    var b = "onclick='buyThis(this.parentNode.parentNode)'";
-    var i;
-    var item;
-    for (i = 0; i <= database.items.length - 1; i += 1) {
-        item = "<tr class='shop-item'>"+
-        "<td>"+database.items[i].name+"</td>"+
-        "<td data-price='"+database.items[i].price+"'><span>"+database.items[i].price+" g</span></td>"+
-        "<td><input type='number'></td><td><button " + b +
-        ">buy</button></td></tr>";
+    var prefix = 'shop_input_'
+    var value_map = {};
+
+    for (var i = 0; i <= database.items.length - 1; i += 1) {
+        var name = database.items[i].name;
+        var price = database.items[i].price;
+
+        var tr = document.createElement("tr");
+        tr.classList.add("shop-item");
+
+        var tdName = document.createElement("td");
+        tdName.innerHTML = name;
+
+        var tdPrice = document.createElement("td");
+        tdPrice.innerHTML = "<span><b>"+price+"</b>¤</span>";
+        tdPrice.dataset.price = price;
+
+        var tdInput = document.createElement("td");
+        var input = document.createElement("input");
+        input.type = "number";
+        input.id = prefix+i;
+        input.dataset.index = i;
+        input.onchange = function(e) {
+          value_map[e.target.id] = e.target.value;
+        }
+        tdInput.append(input);
+
+        var tdButton = document.createElement("td");
+        var button = document.createElement("button");
+        button.innerHTML = "buy";
+        button.dataset.index = i;
+        button.dataset.name = name;
+        button.dataset.price = price;
+        button.onclick = function(e) {
+          var index = e.target.dataset.index;
+          var name = e.target.dataset.name;
+          var price = e.target.dataset.price;
+          var qty = value_map[prefix+index];
+          e.target.disabled = true;
+
+          buyThis(name, price, qty, function(res){
+            if (res === "success") {
+              document.getElementById(prefix+index).style.border = "1px solid green";
+            } else if (res === "reset") {
+              document.getElementById(prefix+index).style.border = "1px solid #f7b733";
+              document.getElementById(prefix+index).value = 0;
+              value_map[prefix+index] = 0;
+              e.target.disabled = false;
+            } else if (res === "error") {
+              document.getElementById(prefix+index).style.border = "1px solid red";
+            }
+          });
+        };
+        tdButton.append(button);
+
+        tr.append(tdName, tdPrice, tdInput, tdButton);
 
         // Conditional item placement (left or right column)
-        if(i<4){
-            $("#shop_inventory").append(item);
+        if(i < 4){
+            $("#shop_inventory").append(tr);
         }else{
-            $("#shop_inventory2").append(item);
+            $("#shop_inventory2").append(tr);
         }
     }
 }
@@ -817,54 +822,43 @@ function shopUpdate(){
     }
 }
 
-function buyThis(item){
-    var item_name = item.firstChild.innerText;
-    var item_price = item.getElementsByTagName("td")[1].dataset.price;
-    var item_qty = item.getElementsByTagName("td")[2].firstChild.value;
+function buyThis(name, price, qty, callback){
+    var parsedQty = parseInt(qty);
 
-    var firstnum = item_qty.substring(0,1);
-    var reg = /^0/gi;
+    var inputIsWrong = !name || !qty || parsedQty <= 0 || qty == "";
+    var notEnoughMoney = (player.money - (parsedQty*price)) < 0;
 
     //wrong input
-    if(item_qty==0 || item_qty==""){
+    if(inputIsWrong){
         alertCustom("red", "you bought nothing.", 3000);
+        callback("error");
     }
     //not enough money
-    else if(player.money<=0 || (item_qty*item_price>player.money)){
-        alertCustom("red", "not enough money.", 3000);
+    else if(notEnoughMoney){
+        alertCustom("red", "not enough ¤.", 3000);
+        callback("error");
     }
-    // else if(item_qty.match(reg)){
-    // alertCustom("red", "please, do not start with 0.", 3000);
-    // }
     else{
-      console.log(item_qty, item_price)
-        //success buy
-        var msg = "You bought: "+item_qty+" "
-        +item_name+"(s). Total price: "+item_qty*item_price;
+      //success buy
+      var msg = "You bought: "+qty+" "
+      +name+"(s). Total price: "+(parsedQty*price)+"¤";
 
-        // console.log(msg)
-        alertCustom("green", msg, 3000);
-        item.getElementsByTagName("td")[2]
-        .firstChild.style.border = "2px solid green";
+      alertCustom("green", msg, 3000);
+      callback("success");
 
+      //put bought items into inventory
+      addItem({
+          "name": name,
+          "qty": parsedQty
+      });
 
-
-        //put bought items into inventory
-        addItem({
-            "name": item_name,
-            "qty": parseInt(item_qty)
-        });
-
-        player.addMoney(-(item_price*item_qty));
-        shopUpdate();
-
-        setTimeout(function(){
-            item.getElementsByTagName("td")[2]
-            .firstChild.value = "0";
-            item.getElementsByTagName("td")[2]
-            .firstChild.style.border = "1.1px solid grey";
-        }, 1000);
+      player.addMoney(-(price*parsedQty));
+      shopUpdate();
     }
+
+    setTimeout(function(){
+      callback("reset");
+    }, 1000);
 }
 
 function sellThis(){
@@ -900,14 +894,9 @@ function sellThis(){
                 sell_price = database.items[i].price-2;
             }
         }
-        console.log(qty);
-        //cek jml item yang dijual bukan 0
-        if(qty!=0 && qty!=null && qty!=" "){
 
-            console.log("sell this:"+item_to_sell);
-            console.log("sell price:"+sell_price);
-            console.log("sell qty:"+qty);
-
+        //cek jumlah item yang dijual lebih besar dari 0
+        if(qty > 0 && qty!=null && qty!=" "){
             var h;
             var j;
             var the_item_index = -1;
@@ -915,8 +904,6 @@ function sellThis(){
                 //cek ada ga di inv
                 if(item_to_sell==player.inventory[h].name){
                     the_item_index = h;
-                }else{
-                    console.log("load...");
                 }
             }
 
@@ -940,7 +927,7 @@ function sellThis(){
                         "<b>"+ qty+" "
                         +item_to_sell+"</b> sold. You got <b>"
                         +(qty*sell_price)
-                        +"</b> gold!",
+                        +"</b> ¤!",
                         3000
                     );
 
@@ -979,7 +966,7 @@ function generateRecipes(){
     for (i = 0; i <= database.recipes.length - 1; i += 1) {
         item = database.recipes[i];
         list = "<div class='recipe'><span class='price'> sell price: <b>"
-        +item.price+"</b> g</span><h4>"+item.name+"</h4>"
+        +item.price+"</b>¤</span><h4>"+item.name+"</h4>"
         +"<ul><li>"+item.ing_1+"</li>"
         +"<li>"+item.ing_2+"</li>"
         +"<li>"+item.ing_3+"</li>"
@@ -1005,8 +992,10 @@ function recipesUpdate(){
 function tipsUpdate(){
     var selected_tips = Math.floor(Math.random() * (database.tips.length + 1));
 
-    //tips adding
-    $("#tips").html(database.tips[selected_tips]);
+    setTimeout(() => {
+      //tips adding
+      $("#tips").html(database.tips[selected_tips]);
+    }, 200);
 }
 
 // CKNKK13. Win Condition
@@ -1019,18 +1008,18 @@ function isWin(){
             $("#recipe_page").hide();
             $("#credits").show("slow");
             $("#main_menu").hide("slow");
-            console.log("10 RECIPES COLLECTED! YOU WIN! CONGRATULATIONS!");
+            console.info("10 RECIPES COLLECTED! YOU WIN! CONGRATULATIONS!");
         }, 1000);
     }else{
         console.clear();
-        console.log("collected_recipes: "+collected_recipes);
+        console.info("collected_recipes: "+collected_recipes);
     }
 }
 
 function isLose(){
   if(player.money <= 0){
       setTimeout(function(){
-          $('#credits').html('you lose. run out of money.')
+          $('#credits').html('you lose. run out of ¤.')
           $("#credits").show("slow");
       }, 1000);
   }
